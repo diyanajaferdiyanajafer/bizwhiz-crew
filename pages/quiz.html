@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Detector - Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #698f5e;
+            color: #080808;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgb(166, 202, 148);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0a4621;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .question-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #0c0c0c;
+            border-radius: 8px;
+            background-color: #429c49;
+        }
+        .question-group p {
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            color: #0c0c0c;
+        }
+        .answer-options label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .answer-options label:hover {
+            background-color: #e6e6e6;
+        }
+        .answer-options input[type="radio"] {
+            margin-right: 10px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+        .submit-btn:hover {
+            background-color: #bbf8be;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Your Daily Mood Check-in</h1>
+
+
+    <form id="moodQuizForm">
+        <!-- Questions will be dynamically generated here -->
+    </form>
+
+    <div id="result" style="text-align: center; margin-top: 20px; font-size: 1.2em; font-weight: bold; display: none;">
+        </div>
+</div>
+
+    <script>
+    // Quiz questions array with mood values
+    const quizQuestions = [
+        {
+            id: 'q1',
+            question: 'How would you describe your energy level today?',
+            options: [
+                {
+                    text: 'I feel very energetic and ready to go😎',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I have a decent amount of energy😌',
+                    value: 3,
+                    moods: { neutral: 1.5, happy: 0.5 }
+                },
+                {
+                    text: 'I feel a bit tired and low on energy😢',
+                    value: 2,
+                    moods: { bored: 1.5, sad: 0.5 }
+                },
+                {
+                    text: 'I feel completely drained and exhausted🥵',
+                    value: 1,
+                    moods: { sad: 1.5, angry: 0.5 }
+                }
+            ]
+        },
+        {
+            id: 'q2',
+            question: 'How often did you smile or laugh today?',
+            options: [
+                {
+                    text: 'Many times, I felt very happy😂',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'A few times, I had some good moments😁',
+                    value: 3,
+                    moods: { neutral: 1.5, happy: 0.5 }
+                },
+                {
+                    text: 'Not much, I didn\'t feel like it🥺',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'Not at all, I haven\'t smiled today😭',
+                    value: 1,
+                    moods: { sad: 2, angry: 1 }
+                }
+            ]
+        },
+        {
+            id: 'q3',
+            question: 'How do you feel about your interactions with others today?',
+            options: [
+                {
+                    text: 'I enjoyed my interactions and felt connected🥳',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'They were mostly neutral or fine☺️',
+                    value: 3,
+                    moods: { neutral: 2 }
+                },
+                {
+                    text: 'I felt a bit isolated or misunderstood☹️',
+                    value: 2,
+                    moods: { sad: 1, angry: 0.5, bored: 0.5 }
+                },
+                {
+                    text: 'I avoided interactions and felt lonely😣',
+                    value: 1,
+                    moods: { sad: 1.5, angry: 1 }
+                }
+            ]
+        },
+        {
+            id: 'q4',
+            question: 'How would you rate your general sense of well-being?',
+            options: [
+                {
+                    text: 'I feel excellent and optimistic about things🤩',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel alright, no major complaints😉',
+                    value: 3,
+                    moods: { neutral: 2 }
+                },
+                {
+                    text: 'I feel a bit down or unwell🫠',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel distressed and very low☹️',
+                    value: 1,
+                    moods: { sad: 1.5, angry: 1 }
+                }
+            ]
+        },
+        {
+            id: 'q5',
+            question: 'How motivated are you to do your tasks or hobbies today?',
+            options: [
+                {
+                    text: 'Very motivated, I\'m excited to get things done🦾',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'Somewhat motivated, I\'ll do what I need to👍',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'Not very motivated, it\'s hard to start🫠',
+                    value: 2,
+                    moods: { bored: 2, sad: 0.5 }
+                },
+                {
+                    text: 'I have no motivation at all😑',
+                    value: 1,
+                    moods: { sad: 1, angry: 1, bored: 1 }
+                }
+            ]
+        },
+        {
+            id: 'q6',
+            question: 'How would you describe your mood today?',
+            options: [
+                {
+                    text: 'I feel happy and content😊',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, not too bad😐',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit down or sad😢',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel angry or frustrated😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },
+        {
+            id: 'q7',
+            question: 'Do you feel like you\'ve had enough rest and peace this week?',
+            options: [
+                {
+                    text: 'Yes, I feel well-rested and at peace🧘‍♂️',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'Somewhat, I could use a bit more relaxation😌',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'Not really, I feel a bit stressed or restless😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'No, I feel very overwhelmed and anxious😩',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },
+        {
+            id: 'q8',
+            question: 'How do you feel about your current situation in life?',
+            options: [
+                {
+                    text: 'I feel optimistic and hopeful about the future🌟',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, things are manageable😌',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit lost or confused about my path😕',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel stuck and frustrated with my situation😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },
+        {
+            id: 'q9',
+            question: 'How do you feel about your relationships with friends and family?',
+         options: [
+                {
+                    text: 'I feel very connected and supported by them❤️',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, we have a decent relationship🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit distant or disconnected from them😕',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel frustrated or angry with some of them😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },  
+        {
+            id: 'q10',
+            question: 'How do you feel about your work or daily tasks?',
+            options: [
+                {
+                    text: 'I feel motivated and excited to work💪',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, I can manage my tasks🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit overwhelmed or stressed by my workload😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel frustrated and unproductive at work😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },  
+        {
+            id: 'q11',
+            question: 'How do you feel about your physical health today?',
+            options: [
+                {
+                    text: 'I feel healthy and energetic💪',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, no major issues🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit unwell or tired😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel very sick or in pain😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },  
+        {
+            id: 'q12',
+            question: 'How do you feel about your financial situation?',
+            options: [
+                {
+                    text: 'I feel secure and stable financially💰',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, I can manage my expenses🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit stressed about money😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel very anxious or worried about finances😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },
+        {
+            id: 'q13',
+            question: 'How do you feel about your personal growth and development?',
+            options: [
+                {
+                    text: 'I feel like I\'m making great progress🌱',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, I\'m learning and improving🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit stuck or stagnant in my growth😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel frustrated and unfulfilled in my personal life😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },
+        {
+            id: 'q14',
+            question: 'How do you feel about your creativity and self-expression?',
+            options: [
+                {
+                    text: 'I feel very creative and inspired🎨',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, I can express myself well🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit blocked or uninspired😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel frustrated and unable to express myself😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        },  
+        {
+            id: 'q15',
+            question: 'How do you feel about your overall happiness and satisfaction with life?',
+            options: [
+                {
+                    text: 'I feel very happy and satisfied with my life😊',
+                    value: 4,
+                    moods: { happy: 2, neutral: 0.5 }
+                },
+                {
+                    text: 'I feel okay, I have some good things going on🙂',
+                    value: 3,
+                    moods: { neutral: 1.5 }
+                },
+                {
+                    text: 'I feel a bit unhappy or dissatisfied😟',
+                    value: 2,
+                    moods: { sad: 1.5, bored: 0.5 }
+                },
+                {
+                    text: 'I feel very unhappy and frustrated with my life😠',
+                    value: 1,
+                    moods: { angry: 2, sad: 0.5 }
+                }
+            ]
+        }
+    ];
+
+    // Generate questions when the page loads
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const form = document.getElementById('moodQuizForm');
+        form.innerHTML = ''; // Clear existing questions
+
+        quizQuestions.forEach((q, index) => {
+            const questionGroup = document.createElement('div');
+            questionGroup.className = 'question-group';
+            
+            questionGroup.innerHTML = `
+                <p>${index + 1}. ${q.question}</p>
+                <div class="answer-options">
+                    ${q.options.map(opt => `
+                        <label>
+                            <input type="radio" name="${q.id}" value="${opt.value}">
+                            ${opt.text}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            
+            form.appendChild(questionGroup);
+        });
+
+        // Add submit button
+        const submitBtn = document.createElement('button');
+        submitBtn.type = 'submit';
+        submitBtn.className = 'submit-btn';
+        submitBtn.textContent = 'Submit and Discover My Mood';
+        form.appendChild(submitBtn);
+    });
+
+    // Initialize mood scores
+    const moodScores = {
+        happy: 0,
+        sad: 0,
+        angry: 0,
+        bored: 0,
+        neutral: 0
+    };
+
+    // Handle form submission
+    document.getElementById('moodQuizForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Reset scores
+        Object.keys(moodScores).forEach(mood => moodScores[mood] = 0);
+
+        let answeredQuestions = 0;
+
+        // Calculate scores based on answers
+        quizQuestions.forEach(q => {
+            const selectedAnswer = document.querySelector(`input[name="${q.id}"]:checked`);
+            
+            if (selectedAnswer) {
+                answeredQuestions++;
+                const value = parseInt(selectedAnswer.value);
+                const option = q.options.find(opt => opt.value === value);
+                
+                // Add mood scores from the selected option
+                Object.entries(option.moods).forEach(([mood, score]) => {
+                    moodScores[mood] += score;
+                });
+            }
+        });
+
+        // Check if all questions are answered
+        if (answeredQuestions < quizQuestions.length) {
+            alert("Please answer all the questions before submitting.");
+            return;
+        }
+
+        // Normalize scores
+        const totalScore = Object.values(moodScores).reduce((a, b) => a + b, 0);
+        Object.keys(moodScores).forEach(mood => {
+            moodScores[mood] = (moodScores[mood] / totalScore) * 100;
+        });
+
+        // Find dominant mood
+        const dominantMood = Object.entries(moodScores).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+
+        // Store results and redirect to result page
+        localStorage.setItem('moodResults', JSON.stringify({
+            timestamp: new Date().toISOString(),
+            scores: moodScores,
+            dominantMood: dominantMood
+        }));
+
+        // Redirect to result page
+        window.location.href = 'result.html';
+
+        // Store results in localStorage
+        localStorage.setItem('moodResults', JSON.stringify({
+            timestamp: new Date().toISOString(),
+            scores: moodScores,
+            dominantMood: dominantMood
+        }));
+    });
+</script>
+
+<style>
+    .mood-results {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+    }
+
+    .mood-bars {
+        margin-top: 20px;
+    }
+
+    .mood-bar {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        gap: 10px;
+    }
+
+    .mood-label {
+        width: 80px;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .mood-progress {
+        flex-grow: 1;
+        height: 20px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .mood-fill {
+        height: 100%;
+        background-color: #A4BE7B;
+        transition: width 1s ease-in-out;
+    }
+
+    .mood-percentage {
+        width: 60px;
+        text-align: left;
+    }
+
+    .dominant-mood {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 1.2em;
+        color: #285430;
+    }
+</style></body>
+</html>

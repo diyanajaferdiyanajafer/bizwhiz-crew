@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Totally Serious (But Not Really) Quiz</title>
+<style>
+  :root{
+    --body-bg: #a6e99f;        /* user requested */
+    --text-color: #020202;     /* user requested */
+    --container-bg: #e3fcde;   /* user requested */
+    --card-bg: #67b66e;        /* user requested question-box bg */
+    --card-border: #051105;    /* user requested border */
+    --h1-color: #183803;       /* user requested h1 color */
+    --q-h3-color: #0a0a0a;     /* user requested question h3 color */
+    --shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  /* ===== Reset & base ===== */
+  * { box-sizing: border-box; }
+  html,body { margin: 0; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+  body {
+    background: var(--body-bg);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  /* ===== Container ===== */
+  .container{
+    width: 100%;
+    max-width: 900px;
+    background: var(--container-bg);
+    border-radius: 18px;
+    padding: 36px;
+    box-shadow: var(--shadow);
+    transition: transform .22s ease, box-shadow .22s ease;
+  }
+  .container:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.12); }
+
+  h1{
+    margin: 0 0 18px 0;
+    text-align: center;
+    color: var(--h1-color);
+    font-size: 2.4rem;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+  }
+
+  p.lead{
+    text-align:center;
+    margin: 8px 0 28px 0;
+    opacity: .95;
+  }
+
+  form { width: 100%; }
+
+  /* ===== Question box ===== */
+  .question-box{
+    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%), var(--card-bg);
+    border: 2px solid var(--card-border);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .question-box:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.10);
+  }
+
+  .question-box h3{
+    margin: 0 0 10px 0;
+    color: var(--q-h3-color);
+    font-size: 1.05rem;
+  }
+
+  .options { margin-top: 8px; }
+  .options label{
+    display: block;
+    background: rgba(255,255,255,0.08);
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: transform .12s ease, background-color .18s ease, box-shadow .12s ease;
+    font-size: 0.98rem;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .options label:hover{
+    transform: translateX(6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* radio styling */
+  input[type="radio"]{
+    margin-right: 12px;
+    transform: scale(1.15);
+    vertical-align: middle;
+    accent-color: #183803;
+  }
+
+  /* Submit area */
+  .actions{
+    display:flex;
+    gap:12px;
+    margin-top: 8px;
+  }
+  button.primary{
+    flex:1;
+    padding: 12px 16px;
+    font-size: 1.05rem;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(90deg,#2a8a34,#4bbf61);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(38,120,52,0.18);
+    transition: transform .14s ease, box-shadow .14s ease;
+  }
+  button.primary:hover{ transform: translateY(-3px); box-shadow: 0 12px 30px rgba(38,120,52,0.22); }
+  button.ghost{
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.08);
+    color: var(--text-color);
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  /* Result box */
+  #result{
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 12px;
+    display: none;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    animation: resultFade .45s ease;
+  }
+
+  /* small helper */
+  .hint { font-size: .9rem; opacity: .9; text-align:center; margin-top:10px; }
+
+  @keyframes resultFade{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  /* responsive */
+  @media (max-width:520px){
+    h1{ font-size:1.6rem; }
+    .container{ padding: 20px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">Your Daily Mood check in</h1>
+    <p class="lead">.</p>
+
+    <form id="quizForm" onsubmit="return false;">
+      <!-- Q1 -->
+      <div class="question-box" aria-labelledby="q1label">
+        <h3 id="q1label"> 1) Was this feeling triggered by a person's behavior?</h3>
+        <div class="options">
+          <label><input type="radio" name="q1" value="annoyed"> Yes — someone did something irritating😇</label>
+          <label><input type="radio" name="q1" value="confused"> maybe  -not sure if it was them or just my mood🥱
+          <label><input type="radio" name="q1" value="indifferent"> No — I think it came from me (internal vibes)😌</label>
+          <label><input type="radio" name="q1" value="hurt"> Partly — it stung a little😉</label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-box" aria-labelledby="q2label">
+        <h3 id="q2label">2) Is today more like eating instant noodles without the seasoning packet?</h3>
+        <div class="options">
+          <label><input type="radio" name="q2" value="bored"> Yes — bland, meh, low-energy day😇</label>
+          <label><input type="radio" name="q2" value="sad"> Kind of — a little disappointing, honestly😔</label>
+          <label><input type="radio" name="q2" value="ok"> Not really — it's acceptable, just plain😒</label>
+          <label><input type="radio" name="q2" value="angry"> No way — it feels off in the wrong direction (annoyed)🙂‍↔️</label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-box" aria-labelledby="q3label">
+        <h3 id="q3label">3) Is today more like putting your phone in the fridge and milk on the charger?</h3>
+        <div class="options">
+          <label><input type="radio" name="q3" value="confused"> Absolutely — I'm all mixed up and scatterbrained😫</label>
+          <label><input type="radio" name="q3" value="confused"> Absolutely — I'm all mixed up and scatterbrained🤯</label>
+          <label><input type="radio" name="q3" value="tired"> A little — I'm tired and making silly mistakes😴</label>
+          <label><input type="radio" name="q3" value="playful"> Not really — I'm in a quirky/funny mood🤪</label>
+          <label><input type="radio" name="q3" value="stressed"> Yes — feels chaotic & stressful🫡</label>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-box" aria-labelledby="q4label">
+        <h3 id="q4label">4) Are you too tired to even complain about being tired?</h3>
+        <div class="options">
+          <label><input type="radio" name="q4" value="exhausted"> Yes — completely zonked, can't produce complaints🥸</label>
+          <label><input type="radio" name="q4" value="apathetic"> Kinda — I don't care either way right now🙃</label>
+          <label><input type="radio" name="q4" value="sleepy"> Not yet — but I could use a nap😶‍🌫️</label>
+          <label><input type="radio" name="q4" value="annoyed"> No — I'm awake and irritable instead😪</label>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question-box" aria-labelledby="q5label">
+        <h3 id="q5label">5) How do you feel when someone chooses loudly next to you?</h3>
+        <div class="options">
+          <label><input type="radio" name="q5" value="irritated"> Irritated — please lower your volume!</label>
+          <label><input type="radio" name="q5" value="curious"> Curious — what's so important?</label>
+          <label><input type="radio" name="q5" value="amused"> Amused — it's kinda funny actually.</label>
+          <label><input type="radio" name="q5" value="anxious"> Anxious — loudness makes me uneasy.</label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="primary" onclick="calculateMood()">Get My Mood</button>
+        <button type="button" class="ghost" onclick="resetQuiz()">Reset</button>
+      </div>
+
+      <div id="result" role="status" aria-live="polite"></div>
+      <div class="hint">Tip: pick the option that feels closest — no overthinking required.</div>
+    </form>
+  </div>
+
+<script>
+  // Mapping of option value -> mood category (we use the value itself)
+  // Messages for final top mood
+  const moodMessages = {
+    annoyed: {
+      title: "Annoyed & Needing Space",
+      text: "Someone or something rubbed you the wrong way. Take a short walk, breathe, and give yourself permission to step away for 5–10 minutes."
+    },
+    confused: {
+      title: "Confused & Scattered",
+      text: "Your brain's doing puzzle mode today. Try a quick list: 1) stop 2) breathe 3) write one clear next step."
+    },
+    indifferent: {
+      title: "Quietly Neutral",
+      text: "You're neither thrilled nor upset — just steady. A small treat (tea or a 5-min break) can brighten things."
+    },
+    hurt: {
+      title: "Hurt (Soft & Sensitive)",
+      text: "Something stung. Be kind to yourself — consider a gentle distraction and, if helpful, a calm message to the person later."
+    },
+    bored: {
+      title: "Bored & Bland",
+      text: "You need a tiny flavor boost. Try a 10-minute novelty: a weird playlist, a quick sketch, or a snack you don't usually eat."
+    },
+    sad: {
+      title: "A Bit Down",
+      text: "It's okay to feel this — small comforts help. Call a friend, listen to a favorite song, or wrap up in something cozy."
+    },
+    ok: {
+      title: "Plainly Okay",
+      text: "Nothing dramatic — you're okay. Use a small win (clear one tiny task) and treat yourself afterwards."
+    },
+    angry: {
+      title: "Angry / Frustrated",
+      text: "You're fired up. Try physical release (stretch, walk) and delay any big replies until you've cooled a bit."
+    },
+    tired: {
+      title: "Tired & A Little Foggy",
+      text: "Your brain would love a nap or a real break. If you can't sleep now, 10 minutes of rest with eyes closed can help."
+    },
+    playful: {
+      title: "Playful & Quirky",
+      text: "You're spotting the absurd — lean into it. Small silly acts will boost your mood further."
+    },
+    stressed: {
+      title: "Stressed & Overloaded",
+      text: "Too much on the plate. Make a tiny list, pick one thing to drop or delegate, breathe deeply."
+    },
+    exhausted: {
+      title: "Exhausted (Full Battery Drain)",
+      text: "Seriously rest is not optional. If possible, step away and take a nap or at least a long break."
+    },
+    apathetic: {
+      title: "Apathetic / Zoned Out",
+      text: "You're checked out for now. Try a sensory reset: splash water on your face, walk outdoors, or change environment."
+    },
+    sleepy: {
+      title: "Sleepy & Dozing",
+      text: "Nap or rest soon. A short 20–30 minute nap can be magic — set an alarm and surrender to it."
+    },
+    irritated: {
+      title: "Irritated (Low Patience)",
+      text: "Little noises or choices are rubbing you. Put on some ear-friendly music or politely remove yourself."
+    },
+    curious: {
+      title: "Curious & Observant",
+      text: "You're interested and questioning — that's great. Ask a friendly question or mentally note what piqued you."
+    },
+    amused: {
+      title: "Amused & Light",
+      text: "Everything's a little funnier — enjoy it! Share a laugh or jot the moment down to brighten later."
+    },
+    anxious: {
+      title: "Anxious / Uncomfortable",
+      text: "Loudness or unpredictability is stressing you. Ground with breathing (4-4-4) and, if needed, a quick calming routine."
+    }
+  };
+
+  function calculateMood(){
+    const form = document.getElementById('quizForm');
+    const requiredNames = ['q1','q2','q3','q4','q5'];
+    // ensure all answered
+    for(const n of requiredNames){
+      if(!form.querySelector(`input[name="${n}"]:checked`)){
+        alert('Please answer all questions before getting your mood.');
+        return;
+      }
+    }
+
+    // tally
+    const selected = Array.from(form.querySelectorAll('input[type=radio]:checked')).map(i => i.value);
+    const tally = {};
+    selected.forEach(v => tally[v] = (tally[v] || 0) + 1);
+
+    // find top mood (highest count). If tie, prefer last selected among tied (small tiebreaker)
+    let top = null;
+    let topCount = -1;
+    for(const v of Object.keys(tally)){
+      if(tally[v] > topCount){
+        top = v; topCount = tally[v];
+      } else if(tally[v] === topCount){
+        // tie-breaker: choose one that appears later in the answers array
+        const lastIndexCurrentTop = selected.lastIndexOf(top);
+        const lastIndexCandidate = selected.lastIndexOf(v);
+        if(lastIndexCandidate > lastIndexCurrentTop) top = v;
+      }
+    }
+
+    renderResult(top);
+  }
+
+  function renderResult(moodKey){
+    const box = document.getElementById('result');
+    if(!moodMessages[moodKey]) {
+      box.style.display = 'block';
+      box.style.background = '#fff7d6';
+      box.innerHTML = "<strong>Hmm — a mysterious mood!</strong><div>Try again or pick slightly different answers.</div>";
+      return;
+    }
+
+    // change background color lightly depending on mood (subtle)
+    const bgMap = {
+      annoyed: '#ffdede', confused: '#fff3d6', indifferent: '#f0fff4', hurt:'#ffe6f0',
+      bored:'#fff9e6', sad:'#ffeef6', ok:'#e8fff0', angry:'#ffd6d6',
+      tired:'#fff7e6', playful:'#eafff2', stressed:'#fff0e0', exhausted:'#fff0f0',
+      apathetic:'#f3f3f3', sleepy:'#fffdf0', irritated:'#fff0e8', curious:'#f0fff9',
+      amused:'#f2fff6', anxious:'#fff2f4'
+    };
+
+    box.style.background = bgMap[moodKey] || '#f6fff6';
+    box.style.border = '1px solid rgba(0,0,0,0.06)';
+    box.style.display = 'block';
+    const m = moodMessages[moodKey];
+    box.innerHTML = `<div style="font-size:1.05rem;color:#051105">${m.title}</div>
+                     <div style="margin-top:8px;color:#111">${m.text}</div>`;
+    // scroll to result on small screens
+    box.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+
+  function resetQuiz(){
+    document.getElementById('quizForm').reset();
+    const r = document.getElementById('result');
+    r.style.display = 'none';
+    r.innerHTML = '';
+  }
+</script>
+</body>
+</html>

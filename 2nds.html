@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hilariously Absurd Quiz</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #a6e99f;
+    color: #020202;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background-color: #e3fcde;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 750px;
+    width: 100%;
+  }
+  h1 {
+    color: #183803;
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+  }
+  .question-box {
+    background-color: #67b66e;
+    border: 2px solid #051105;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 15px;
+  }
+  .question-box h3 {
+    margin-top: 0;
+    color: #0a0a0a;
+    font-size: 1.5em;
+  }
+  .options {
+    margin-top: 15px;
+  }
+  .options label {
+    display: block;
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+  }
+  .options label:hover {
+    background-color: #f2f2f2;
+  }
+  input[type="radio"] {
+    margin-right: 15px;
+    transform: scale(1.2);
+  }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 30px;
+  }
+  .submit-btn:hover {
+    background-color: #bbf8be;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Your Daily Mood Check in</h1>
+
+  <form>
+    
+    <div class="question-box">
+      <h3>1. Which animal would be the best to have as your personal assistant?</h3>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a"> A penguin, because they're always dressed for success🐼</label>
+        <label><input type="radio" name="q1" value="b"> A squirrel, because they're great at finding things you've lost🐿</label>
+        <label><input type="radio" name="q1" value="c"> A sloth, because they'll remind you to take things slow and easy🦥</label>
+        <label><input type="radio" name="q1" value="d"> A koala, because they can sleep on the job and nobody would question it🐻</label>
+      </div>
+    </div>
+    
+    <div class="question-box">
+      <h3>2. You've just been hired as the official "Mood-Setter" for the world. What's the first thing you do?</h3>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a"> Replace all elevator music with disco hits from the '70s🤠</label>
+        <label><input type="radio" name="q2" value="b"> Make sure every single person gets a free puppy (or kitten, or bunny🐶</label>
+        <label><input type="radio" name="q2" value="c"> Mandate that every Friday is now "Fancy Hat Friday" for everyone🍕</label>
+        <label><input type="radio" name="q2" value="d"> Declare that whenever someone yawns, everyone else has to meow🐱</label>
+      </div>
+    </div>
+    
+    <div class="question-box">
+      <h3>3. What's the most inconvenient superpower to have?</h3>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a"> The ability to turn invisible, but only when you're sneezing🤧</label>
+        <label><input type="radio" name="q3" value="b"> The power to fly, but only at a very slow walking pace🦅</label>
+        <label><input type="radio" name="q3" value="c"> The ability to read minds, but you can only hear what people are thinking about cheese🧀</label>
+        <label><input type="radio" name="q3" value="d"> The power to summon a perfectly toasted slice of bread, but only when you're not hungry🍞</label>
+      </div>
+    </div>
+    
+    <div class="question-box">
+      <h3>4. You have been given the ability to communicate with inanimate objects. What is the first thing you talk to?</h3>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a"> Your couch, to ask about all the lost remote controls🤖</label>
+        <label><input type="radio" name="q4" value="b"> Your refrigerator, to find out what's really happening inside at night🧊</label>
+        <label><input type="radio" name="q4" value="c"> A random rubber ducky, just to hear what it has to say🦆</label>
+        <label><input type="radio" name="q4" value="d"> Your alarm clock, to apologize for hitting snooze so many times⏰</label>
+      </div>
+    </div>
+    
+    <div class="question-box">
+      <h3>5. What is the best way to escape a grumpy mood?</h3>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> Wear a silly hat and dance to a pop song👒</label>
+        <label><input type="radio" name="q5" value="b"> Eat a whole box of your favorite cookies and blame it on a ghost👻</label>
+        <label><input type="radio" name="q5" value="c"> Invent a secret handshake with a pet👣</label>
+        <label><input type="radio" name="q5" value="d"> Tell a bad joke and make yourself laugh😸</label>
+      </div>
+    </div> 
+  <button type="submit" class="submit-btn">Submit and Discover My Mood</button>
+    </form>
+
+    <div id="result" style="text-align: center; margin-top: 20px; font-size: 1.2em; font-weight: bold; display: none;">
+        </div>
+</div>
+<script>
+    document.getElementById('moodQuizForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents the form from reloading the page
+
+        let totalScore = 0;
+        let answeredQuestions = 0;
+        const totalQuestions = 5;
+
+        // Loop through all questions
+        for (let i = 1; i <= totalQuestions; i++) {
+            const questionName = `q${i}`;
+            const selectedAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
+            
+            if (selectedAnswer) {
+                totalScore += parseInt(selectedAnswer.value);
+                answeredQuestions++;
+            }
+        }
+
+        // Make sure all questions are answered
+        if (answeredQuestions < totalQuestions) {
+            alert("Please answer all the questions before submitting.");
+            return;
+        }
+
+        // Calculate the mood percentage
+        // The maximum possible score is 5 questions * 4 points = 20
+        const maxScore = totalQuestions * 4;
+        const moodPercentage = (totalScore / maxScore) * 100;
+
+        // Display the result
+        const resultDiv = document.getElementById('result');
+        let moodMessage = '';
+
+        if (moodPercentage >= 80) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% happy**. You are feeling great today!`;
+        } else if (moodPercentage >= 60) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% content**. Things are looking good!`;
+        } else if (moodPercentage >= 40) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% neutral**. A bit of a mixed day.`;
+        } else if (moodPercentage >= 20) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% sad**. It's okay to have a tough day.`;
+        } else {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% very low**. Remember to take care of yourself.`;
+        }
+
+        resultDiv.innerHTML = moodMessage;
+        resultDiv.style.display = 'block';
+
+        // Here you would also add the code to save this data
+        // For example, using local storage or sending it to a server.
+        console.log(`Final Mood Percentage: ${moodPercentage.toFixed(2)}%`);
+    });
+</script>
+
+</body>
+<html>
+</body>
+</html>

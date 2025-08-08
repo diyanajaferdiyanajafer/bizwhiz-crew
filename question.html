@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Detector - Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #698f5e;
+            color: #080808;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgb(166, 202, 148);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0a4621;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .question-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #0c0c0c;
+            border-radius: 8px;
+            background-color: #429c49;
+        }
+        .question-group p {
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            color: #0c0c0c;
+        }
+        .answer-options label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .answer-options label:hover {
+            background-color: #e6e6e6;
+        }
+        .answer-options input[type="radio"] {
+            margin-right: 10px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+        .submit-btn:hover {
+            background-color: #bbf8be;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Your Daily Mood Check-in</h1>
+
+
+    <form id="moodQuizForm">
+
+        <div class="question-group">
+            <p>1. How would you describe your energy level today?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q1" value="4"> I feel very energetic and ready to go😎</label>
+                <label><input type="radio" name="q1" value="3"> I have a decent amount of energy😌</label>
+                <label><input type="radio" name="q1" value="2"> I feel a bit tired and low on energy😢</label>
+                <label><input type="radio" name="q1" value="1"> I feel completely drained and exhausted🥵</label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <p>2. How often did you smile or laugh today?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q2" value="4"> Many times, I felt very happy😂</label>
+                <label><input type="radio" name="q2" value="3"> A few times, I had some good moments😁</label>
+                <label><input type="radio" name="q2" value="2"> Not much, I didn't feel like it🥺</label>
+                <label><input type="radio" name="q2" value="1"> Not at all, I haven't smiled today😭</label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <p>3. How do you feel about your interactions with others today?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q3" value="4"> I enjoyed my interactions and felt connected🥳</label>
+                <label><input type="radio" name="q3" value="3"> They were mostly neutral or fine☺️</label>
+                <label><input type="radio" name="q3" value="2"> I felt a bit isolated or misunderstood☹️</label>
+                <label><input type="radio" name="q3" value="1"> I avoided interactions and felt lonely😣</label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <p>4. How would you rate your general sense of well-being?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q4" value="4"> I feel excellent and optimistic about things🤩</label>
+                <label><input type="radio" name="q4" value="3"> I feel alright, no major complaints😉
+            </label>
+                <label><input type="radio" name="q4" value="2"> I feel a bit down or unwell🫠</label>
+                <label><input type="radio" name="q4" value="1"> I feel distressed and very low☹️</label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <p>5. How motivated are you to do your tasks or hobbies today?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q5" value="4"> Very motivated, I'm excited to get things done🦾</label>
+                <label><input type="radio" name="q5" value="3"> Somewhat motivated, I'll do what I need to👍</label>
+                <label><input type="radio" name="q5" value="2"> Not very motivated, it's hard to start🫠</label>
+                <label><input type="radio" name="q5" value="1"> I have no motivation at all😑</label>
+            </div>
+        </div>
+
+         st<button type="submit" class="submit-btn">Submit and Discover My Mood</button>
+    </form>
+
+    <div id="result" style="text-align: center; margin-top: 20px; font-size: 1.2em; font-weight: bold; display: none;">
+        </div>
+</div>
+
+<script>
+    document.getElementById('moodQuizForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents the form from reloading the page
+
+        let totalScore = 0;
+        let answeredQuestions = 0;
+        const totalQuestions = 5;
+
+        // Loop through all questions
+        for (let i = 1; i <= totalQuestions; i++) {
+            const questionName = `q${i}`;
+            const selectedAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
+            
+            if (selectedAnswer) {
+                totalScore += parseInt(selectedAnswer.value);
+                answeredQuestions++;
+            }
+        }
+
+        // Make sure all questions are answered
+        if (answeredQuestions < totalQuestions) {
+            alert("Please answer all the questions before submitting.");
+            return;
+        }
+
+        // Calculate the mood percentage
+        // The maximum possible score is 5 questions * 4 points = 20
+        const maxScore = totalQuestions * 4;
+        const moodPercentage = (totalScore / maxScore) * 100;
+
+        // Display the result
+        const resultDiv = document.getElementById('result');
+        let moodMessage = '';
+
+        if (moodPercentage >= 80) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% happy**. You are feeling great today!`;
+        } else if (moodPercentage >= 60) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% content**. Things are looking good!`;
+        } else if (moodPercentage >= 40) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% neutral**. A bit of a mixed day.`;
+        } else if (moodPercentage >= 20) {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% sad**. It's okay to have a tough day.`;
+        } else {
+            moodMessage = `Your mood is **${moodPercentage.toFixed(0)}% very low**. Remember to take care of yourself.`;
+        }
+
+        resultDiv.innerHTML = moodMessage;
+        resultDiv.style.display = 'block';
+
+        // Here you would also add the code to save this data
+        // For example, using local storage or sending it to a server.
+        console.log(`Final Mood Percentage: ${moodPercentage.toFixed(2)}%`);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Mood Analysis - Mood Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #698f5e;
+            color: #080808;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .result-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgb(166, 202, 148);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #0a4621;
+        }
+
+        .mood-results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+
+        .mood-bars {
+            margin-top: 20px;
+        }
+
+        .mood-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .mood-label {
+            width: 80px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .mood-progress {
+            flex-grow: 1;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .mood-fill {
+            height: 100%;
+            background-color: #A4BE7B;
+            transition: width 1s ease-in-out;
+        }
+
+        .mood-percentage {
+            width: 60px;
+            text-align: left;
+        }
+
+        .dominant-mood {
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            color: #285430;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+        .quote-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+
+        .quote {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #A4BE7B;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .quote p {
+            margin: 0;
+            font-style: italic;
+            color: #285430;
+        }
+
+        .quote .author {
+            margin-top: 8px;
+            font-weight: 500;
+            text-align: right;
+            color: #5F8D4E;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #5F8D4E;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <h1>Your Mood Analysis</h1>
+        <div id="moodResult" class="mood-results">
+            <!-- Mood analysis will be inserted here -->
+        </div>
+
+        <div class="quote-section">
+            <h2>Daily Inspiration</h2>
+            <div id="quotes">
+                <!-- Quotes will be inserted here -->
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn" onclick="location.href='quiz.html'">Take Another Quiz</button>
+            <button class="btn btn-secondary" onclick="location.href='../index.html'">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        // Motivational quotes based on different moods
+        const moodQuotes = {
+            happy: [
+                { quote: "Happiness is not something ready made. It comes from your own actions.", author: "Dalai Lama" },
+                { quote: "The most wasted of all days is one without laughter.", author: "E.E. Cummings" },
+                { quote: "Keep your face always toward the sunshine—and shadows will fall behind you.", author: "Walt Whitman" }
+            ],
+            sad: [
+                { quote: "Even the darkest night will end and the sun will rise.", author: "Victor Hugo" },
+                { quote: "You are stronger than you know. More capable than you ever dreamed.", author: "Unknown" },
+                { quote: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" }
+            ],
+            angry: [
+                { quote: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+                { quote: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" },
+                { quote: "Holding onto anger is like drinking poison and expecting the other person to die.", author: "Buddha" }
+            ],
+            bored: [
+                { quote: "Life is not about finding yourself. Life is about creating yourself.", author: "George Bernard Shaw" },
+                { quote: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                { quote: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe" }
+            ],
+            neutral: [
+                { quote: "Every day is a new beginning. Take a deep breath and start again.", author: "Unknown" },
+                { quote: "The journey of a thousand miles begins with one step.", author: "Lao Tzu" },
+                { quote: "Your attitude determines your direction.", author: "Ralph Waldo Emerson" }
+            ]
+        };
+
+        // Function to get random quotes based on mood
+        function getRandomQuotes(mood, count = 2) {
+            const allQuotes = [...moodQuotes[mood]];
+            // Also add some general positive quotes
+            const generalQuotes = [...moodQuotes.happy, ...moodQuotes.neutral];
+            allQuotes.push(...generalQuotes);
+            
+            const shuffled = allQuotes.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Get mood results from localStorage
+            const results = JSON.parse(localStorage.getItem('moodResults'));
+            
+            if (!results) {
+                window.location.href = 'quiz.html';
+                return;
+            }
+
+            // Display mood analysis
+            const moodResultDiv = document.getElementById('moodResult');
+            let moodContent = '<div class="mood-bars">';
+            
+            Object.entries(results.scores)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([mood, score]) => {
+                    moodContent += `
+                        <div class="mood-bar">
+                            <div class="mood-label">${mood.charAt(0).toUpperCase() + mood.slice(1)}</div>
+                            <div class="mood-progress">
+                                <div class="mood-fill" style="width: ${score.toFixed(1)}%"></div>
+                            </div>
+                            <div class="mood-percentage">${score.toFixed(1)}%</div>
+                        </div>`;
+                });
+            
+            moodContent += '</div>';
+            moodContent += `<p class="dominant-mood">Your dominant mood appears to be <strong>${results.dominantMood.toUpperCase()}</strong></p>`;
+            
+            moodResultDiv.innerHTML = moodContent;
+
+            // Display relevant quotes
+            const quotesDiv = document.getElementById('quotes');
+            const selectedQuotes = getRandomQuotes(results.dominantMood);
+            
+            quotesDiv.innerHTML = selectedQuotes.map(q => `
+                <div class="quote">
+                    <p>"${q.quote}"</p>
+                    <div class="author">- ${q.author}</div>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>
