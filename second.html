@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker - How It Helps You</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>How Mood Tracking Helps You</h1>
+        </div>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <h2 class="card-title">Recognize Triggers</h2>
+                <p class="card-description">Understand the situations or people that affect your emotional state. Identify what brings you joy and what causes stress in your daily life.</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">Identify Patterns</h2>
+                <p class="card-description">Spot emotional trends over time to gain valuable insights into your mental health. Discover recurring themes that influence your wellbeing.</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">Improve Self-Awareness</h2>
+                <p class="card-description">Develop deeper insight into your feelings, thoughts, and behaviors. Build a stronger connection with your inner emotional landscape.</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">Track Progress</h2>
+                <p class="card-description">Monitor how your mood changes and improves through reflection and consistency. Celebrate your growth and mental health journey.</p>
+            </div>
+        </div>
+        
+        <div class="next-button-container">
+            <button class="next-button" onclick="handleNext()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        function handleNext() {
+            // Add a subtle animation before navigation
+            document.querySelector('.next-button').style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                // Here you would typically navigate to the next page
+                console.log('Navigating to next page...');
+                // alert('Ready to proceed to the next step!');
+                window.location.href = "pages/quiz.html"; // Change to your next page
+            }, 150);
+        }
+
+        // Add some interactive polish
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            });
+        });
+    </script>
+</body>
+</html>
