@@ -37,39 +37,16 @@ For Software:
 
 # Screenshots (Add at least 3)
 ![img 1](1.png)
-*Add caption explaining what this shows*
+*welcome page*
 
 ![Screenshot2](2.png)
-*Add caption explaining what this shows*
+*about the importance of mood*
 
 ![Screenshot3](3.png)
-*Add caption explaining what this shows*
-
-# Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
-
-For Hardware:
-
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
-# Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
+* the question whivh detect mood *
 
 ### Project Demo
-# Video
+# Videoz
 [Add your demo video link here]
 *Explain what the video demonstrates*
 
@@ -77,15 +54,15 @@ For Hardware:
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- [DiyanaJAFER]: [WELCOME PAGE AND questions]
+- [fathima farha kk]:[result page and questions]
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
 
 ![Static Badge](https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
 ![Static Badge](https://img.shields.io/badge/UselessProjects--25-25?link=https%3A%2F%2Fwww.tinkerhub.org%2Fevents%2FQ2Q1TQKX6Q%2FUseless%2520Projects)
+
 
 
 
