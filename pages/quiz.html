@@ -483,12 +483,24 @@
         }
     ];
 
+    // Function to shuffle array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     // Generate questions when the page loads
     window.addEventListener('DOMContentLoaded', (event) => {
         const form = document.getElementById('moodQuizForm');
         form.innerHTML = ''; // Clear existing questions
 
-        quizQuestions.forEach((q, index) => {
+        // Get 5 random questions
+        const randomQuestions = shuffleArray([...quizQuestions]).slice(0, 5);
+
+        randomQuestions.forEach((q, index) => {
             const questionGroup = document.createElement('div');
             questionGroup.className = 'question-group';
             
@@ -549,9 +561,9 @@
             }
         });
 
-        // Check if all questions are answered
-        if (answeredQuestions < quizQuestions.length) {
-            alert("Please answer all the questions before submitting.");
+        // Check if all 5 questions are answered
+        if (answeredQuestions < 5) {
+            alert("Please answer all 5 questions before submitting.");
             return;
         }
 
