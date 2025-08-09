@@ -9,45 +9,34 @@
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
+- Team Lead: [Name] - [DIYANA JAFER]
+- Member 2: [Name] - [FATHIMA FARHA KK]
 - Member 3: [Name] - [College]
 
 ### Project Description
-[2-3 lines about what your project does]
+["Our project is based on the mood detecter  which detects a person's mood based on the questions provided"]
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+["We ended the devastating confusion between being sad and just needing cofee"]
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+["It tells peoples their mood which already they know"]
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
-
-For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+- HTML,CSS,JAVA SCRIPT
 
 ### Implementation
 For Software:
-# Installation
-[commands]
 
-# Run
-[commands]
+
 
 ### Project Documentation
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
+![](Add screenshot 1 here with proper name)
 *Add caption explaining what this shows*
 
 ![Screenshot2](Add screenshot 2 here with proper name)
@@ -97,6 +86,7 @@ Made with ❤️ at TinkerHub Useless Projects
 
 ![Static Badge](https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
 ![Static Badge](https://img.shields.io/badge/UselessProjects--25-25?link=https%3A%2F%2Fwww.tinkerhub.org%2Fevents%2FQ2Q1TQKX6Q%2FUseless%2520Projects)
+
 
 
 
